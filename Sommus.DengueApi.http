@@ -1,0 +1,6 @@
+@Sommus.DengueApi_HostAddress = http://localhost:5011
+
+GET {{Sommus.DengueApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
