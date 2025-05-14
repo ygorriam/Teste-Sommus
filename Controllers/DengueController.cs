@@ -24,58 +24,45 @@ public class DengueController : ControllerBase
         _logger = logger;
     }
 
-
     [HttpGet("por-semana")]
     [ProducesResponseType(200, Type = typeof(DengueSemanaResponse))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetPorSemana(
-   [FromQuery, Range(1, 53)] int ew,
-   [FromQuery, Range(2000, 2100)] int ey)
+    [FromQuery, Range(1, 53)] int ew,
+    [FromQuery, Range(2000, 2100)] int ey)
     {
         try
         {
-            // Obtém os dados da semana solicitada
-            var dados = await _service.ObterDadosPorSemanaAsync(ew, ey);
+            var dado = await _service.ObterDadosPorSemanaAsync(ew, ey);
 
-            // Se não encontrar dados, retorna 404 Not Found
-            if (dados == null || !dados.Any())
+            if (dado == null)
             {
                 return NotFound();
             }
 
-            // Criando uma lista de respostas para cada entrada
-            var resposta = dados.Select(dado => new
+            // Construção correta da resposta
+            var response = new DengueSemanaResponse(
+                dado.SemanaEpidemiologica,
+                dado.CasosEstimados,
+                dado.CasosNotificados,
+                dado.NivelAlerta
+            );
+
+            // Retorna a resposta com as propriedades corretamente serializadas
+            return Ok(new
             {
-                semanaEpidemiologica = dado.SE,
-                casosEstimados = dado.casos_est,
-                casosNotificados = dado.casos, // Ou outro valor que represente os casos notificados
-                nivelAlerta = dado.nivel,
-                corNivelAlerta = GetCorNivelAlerta(dado.nivel)
-            }).ToList();
-
-            // Retorna OK com a lista de respostas
-            return Ok(resposta);
+                semanaEpidemiologica = response.SemanaEpidemiologica,
+                casosEstimados = response.CasosEstimados,
+                casosNotificados = response.CasosNotificados,
+                nivelAlerta = response.NivelAlerta,
+                corNivelAlerta = response.CorNivelAlerta
+            });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Em caso de erro, retorna 500
-            return StatusCode(500, new { message = ex.Message });
+            return StatusCode(500);
         }
     }
-
-    // Método para obter a cor de nível de alerta
-    private string GetCorNivelAlerta(int nivelAlerta)
-    {
-        switch (nivelAlerta)
-        {
-            case 1: return "green";
-            case 2: return "yellow";
-            case 3: return "orange";
-            case 4: return "red";
-            default: return "gray";
-        }
-    }
-
 
 
     [HttpGet("ultimas-semanas")]
