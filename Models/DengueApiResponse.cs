@@ -23,7 +23,7 @@ public class DengueApiResponse {
     public DateTime DataInicioSemana =>
         DateTimeOffset.FromUnixTimeMilliseconds(DataInicioSemanaUnix).DateTime;
 
-    // Adicione este método para facilitar a formatação
+    
     public string SemanaFormatada =>
         $"{DataInicioSemana.Year}-{SemanaEpidemiologica.ToString().Substring(4)}";
 }
