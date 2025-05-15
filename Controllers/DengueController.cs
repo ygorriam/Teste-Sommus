@@ -40,7 +40,7 @@ public class DengueController : ControllerBase
                 return NotFound();
             }
 
-            // Construção correta da resposta
+            
             var response = new DengueSemanaResponse(
                 dado.SemanaEpidemiologica,
                 dado.CasosEstimados,
@@ -48,7 +48,7 @@ public class DengueController : ControllerBase
                 dado.NivelAlerta
             );
 
-            // Retorna a resposta com as propriedades corretamente serializadas
+        
             return Ok(new
             {
                 semanaEpidemiologica = response.SemanaEpidemiologica,
