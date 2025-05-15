@@ -131,16 +131,6 @@ GET /api/dengue/semanas-com-alerta?quantidade=5&nivelMinimo=2
 
 ---
 
-## Testes
-
-Este projeto inclui testes unitários para as camadas de serviço e controle. Para executar os testes:
-
-```bash
-dotnet test
-```
-
----
-
 ## Considerações finais
 
 - A aplicação segue boas práticas de arquitetura, separando responsabilidades em camadas Controller, Service e Repository.  
